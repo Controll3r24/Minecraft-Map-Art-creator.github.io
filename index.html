@@ -1,89 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistemazione Bug</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controller Map Art Generator — da foto a mappa di blocchi</title>
+<meta name="description" content="Carica una foto, scegli Survival o Creativa e scarica un .schem pronto per WorldEdit/Litematica, l'anteprima, la lista materiali e i comandi per costruirla in Minecraft.">
 
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f4f5f7;
-      color: #172b4d;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
-    }
+<!-- Anteprima link (Discord, WhatsApp, Twitter/X, Facebook...).
+     Dopo aver pubblicato il sito, sostituisci SITE_URL qui sotto (3 volte)
+     con il tuo indirizzo reale: vedi README, sezione "Anteprima link". -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Controller Map Art Generator">
+<meta property="og:title" content="Controller Map Art Generator">
+<meta property="og:description" content="Da foto a mappa di blocchi Minecraft: Creativa o Survival, export .schem pronto per WorldEdit/Litematica, tutto nel browser.">
+<meta property="og:image" content="SITE_URL/assets/social-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="SITE_URL/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Controller Map Art Generator">
+<meta name="twitter:description" content="Da foto a mappa di blocchi Minecraft: Creativa o Survival, export .schem pronto per WorldEdit/Litematica, tutto nel browser.">
+<meta name="twitter:image" content="SITE_URL/assets/social-preview.png">
 
-    .card {
-      background-color: #ffffff;
-      padding: 40px 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      text-align: center;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      margin-bottom: 12px;
-    }
-
-    p {
-      color: #5e6c84;
-      font-size: 0.95rem;
-      margin-bottom: 24px;
-    }
-
-    button {
-      background-color: #0052cc;
-      color: #ffffff;
-      border: none;
-      padding: 12px 24px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    button:hover {
-      background-color: #0065ff;
-    }
-
-    .status-text {
-      margin-top: 16px;
-      font-weight: 600;
-      color: #de350b;
-      min-height: 24px;
-    }
-  </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="card">
-    <h1>Sistemazione Bug</h1>
-    <p>Il sito è momentaneamente in manutenzione per la risoluzione di alcuni errori.</p>
-    
-    <button onclick="avviso()">Controlla stato</button>
-    
-    <div id="stato" class="status-text"></div>
+<section class="history-strip" id="historyStrip" aria-label="Cronologia delle build della community">
+  <div class="history-strip-inner">
+    <p class="history-label">Cronologia build della community</p>
+    <div class="history-track-wrap">
+      <div class="history-track" id="historyTrack">
+        <p class="history-empty" id="historyEmpty">Ancora nessuna build salvata: carica una foto e sii il primo a comparire qui.</p>
+      </div>
+    </div>
   </div>
+</section>
 
-  <script>
-    function avviso() {
-      alert("Torna più tardi");
-      document.getElementById("stato").textContent = "Torna più tardi";
-    }
-  </script>
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Controller Map Art Generator</h1>
+    <p class="lede">Carica una foto e trasformala in una mappa di blocchi di Minecraft: scegli tra
+      <strong>Creativa</strong>, con la massima fedeltà dei colori, e <strong>Survival</strong>, con solo blocchi facili da procurarsi.
+      Poi scarica un file <strong>.schem</strong> pronto per WorldEdit o Litematica, o il pacchetto completo con anteprima, materiali e comandi.</p>
+  </div>
+</header>
 
+<main class="workspace">
+
+  <section class="panel controls" aria-label="Impostazioni">
+
+    <div class="field">
+      <h2>1. Immagine</h2>
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <div id="dropzoneEmpty" class="dropzone-empty">
+          <span class="dropzone-icon" aria-hidden="true"></span>
+          <p>Trascina una foto qui<br>o fai clic per sceglierla</p>
+        </div>
+        <div id="dropzoneLoaded" class="dropzone-loaded" hidden>
+          <span class="dropzone-check" aria-hidden="true">✓</span>
+          <p id="dropzoneFileName">immagine.jpg</p>
+          <p class="dropzone-change">clicca per cambiare foto</p>
+        </div>
+      </label>
+      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp, image/bmp" hidden>
+    </div>
+
+    <div class="field" id="cropField" hidden>
+      <h2>2. Ritaglia e adatta</h2>
+      <div class="crop-wrap">
+        <canvas id="cropCanvas" width="320" height="320"></canvas>
+      </div>
+
+      <div class="crop-controls">
+        <select id="cropMode">
+          <option value="cover">Riempi e ritaglia (consigliato)</option>
+          <option value="contain">Adatta intera (con margini)</option>
+          <option value="stretch">Deforma per riempire</option>
+        </select>
+        <label class="zoom-row" id="zoomRow">
+          Zoom
+          <input type="range" id="cropZoom" min="1" max="4" step="0.01" value="1">
+        </label>
+        <button type="button" id="cropResetBtn" class="text-btn">Reimposta ritaglio</button>
+      </div>
+
+      <p class="crop-hint">Trascina l'immagine per spostarla nel riquadro. Sotto vedi subito com'è il colore a blocchi risultante.</p>
+
+      <div class="mini-preview-wrap">
+        <canvas id="miniPreviewCanvas"></canvas>
+      </div>
+    </div>
+
+    <div class="field">
+      <h2>3. Modalità</h2>
+      <div class="mode-choice">
+        <button type="button" class="mode-btn active" data-mode="creativa">
+          Creativa
+          <span>Palette intera, massima fedeltà cromatica</span>
+        </button>
+        <button type="button" class="mode-btn" data-mode="survival">
+          Survival
+          <span>Solo blocchi facili da ottenere in gioco</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <h2>4. Dimensione</h2>
+      <select id="sizePreset">
+        <option value="32">Mini — 32×32</option>
+        <option value="64">Piccola — 64×64</option>
+        <option value="128" selected>Standard — 128×128 (1 mappa)</option>
+        <option value="256">Grande — 256×256 (2×2 mappe)</option>
+        <option value="384">Enorme — 384×384 (3×3 mappe)</option>
+        <option value="custom">Personalizzata…</option>
+      </select>
+      <div class="custom-size" id="customSize" hidden>
+        <label>Largh. <input type="number" id="customW" min="8" max="512" value="128"></label>
+        <label>Alt. <input type="number" id="customH" min="8" max="512" value="128"></label>
+      </div>
+    </div>
+
+    <button type="button" id="generateBtn" class="primary-btn" disabled>Genera anteprima</button>
+  </section>
+
+  <section class="panel preview-panel" aria-label="Anteprima">
+    <div class="canvas-wrap">
+      <canvas id="previewCanvas"></canvas>
+      <p class="placeholder" id="placeholderText">La tua costruzione a blocchi apparirà qui</p>
+    </div>
+
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><span id="statBlocks">0</span><label>blocchi totali</label></div>
+      <div class="stat"><span id="statUnique">0</span><label>tipi di blocco</label></div>
+      <div class="stat"><span id="statSize">0×0</span><label>dimensione</label></div>
+    </div>
+
+    <div class="download-row">
+      <button type="button" id="downloadSchemBtn" class="primary-btn" disabled>Scarica .schem</button>
+      <button type="button" id="downloadBtn" class="primary-btn secondary-btn" disabled>Scarica pacchetto .zip completo</button>
+    </div>
+  </section>
+
+  <section class="panel materials-panel" id="materialsPanel" hidden aria-label="Lista materiali">
+    <h2>Lista materiali</h2>
+    <div class="materials-list" id="materialsList"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Controller Map Art Generator è un progetto amatoriale, non affiliato con Mojang o Microsoft. Minecraft è un marchio registrato di Mojang Synergies AB. Tutta la conversione avviene nel tuo browser: nessuna immagine viene caricata su un server, a meno che tu scelga di salvare una build nella Cronologia condivisa.</p>
+  <p class="credit">Realizzato per la community di <a href="https://www.youtube.com/@Controll3r24" target="_blank" rel="noopener">Controll3r24</a> — <a href="https://discord.gg/VegdMaWkV6" target="_blank" rel="noopener">unisciti al Discord</a>.</p>
+</footer>
+
+<div class="modal-backdrop" id="nicknameModalBackdrop" hidden>
+  <div class="modal bevel">
+    <h2>Salva nella Cronologia?</h2>
+    <p>Se vuoi, la tua build può comparire nel carosello in cima al sito, con il nickname che scegli.</p>
+    <label class="modal-field">
+      Nickname (opzionale)
+      <input type="text" id="nicknameInput" maxlength="24" placeholder="Es. Steve93">
+    </label>
+    <div class="modal-actions">
+      <button type="button" id="modalSkipBtn" class="primary-btn secondary-btn small-btn">Solo scarica</button>
+      <button type="button" id="modalSaveBtn" class="primary-btn small-btn">Salva e scarica</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="blocks.js"></script>
+<script src="schem.js"></script>
+<script src="history.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
