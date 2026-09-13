@@ -456,46 +456,53 @@
     placeholderText.hidden = false;
   }
 
-  // ============================================================
-  // 6. Modal "salva nella Cronologia?"
-  // ============================================================
+function askToSaveHistory() {
+  return new Promise(resolve => {
+    nicknameInput.value = '';
+    nicknameModalBackdrop.hidden = false;
+    nicknameInput.focus();
 
-  function askToSaveHistory() {
-    return new Promise(resolve => {
-      nicknameInput.value = '';
-      nicknameModalBackdrop.hidden = false;
-      nicknameInput.focus();
-
-      function cleanup(choice) {
-        nicknameModalBackdrop.hidden = true;
-        modalSaveBtn.removeEventListener('click', onSave);
-        modalSkipBtn.removeEventListener('click', onSkip);
-        resolve(choice);
-      }
-      function onSave() { cleanup({ save: true, nickname: nicknameInput.value }); }
-      function onSkip() { cleanup({ save: false }); }
-
-      modalSaveBtn.addEventListener('click', onSave);
-      modalSkipBtn.addEventListener('click', onSkip);
-    });
-  }
-
-  async function maybeSaveToHistory(choice, pngBlob, schemBlob) {
-    if (!choice.save || !window.CMAGHistory) return;
-    try {
-      await CMAGHistory.saveEntry({
-        pngBlob, schemBlob,
-        nickname: choice.nickname,
-        baseName: currentFileBaseName,
-        mode: currentMode,
-        width: result.width,
-        height: result.height
-      });
-      await refreshHistoryCarousel();
-    } catch (err) {
-      console.warn('Salvataggio nella cronologia non riuscito:', err);
+    function cleanup(choice) {
+      nicknameModalBackdrop.hidden = true;
+      modalSaveBtn.removeEventListener('click', onSave);
+      modalSkipBtn.removeEventListener('click', onSkip);
+      resolve(choice);
     }
+    
+    function onSave() { 
+      cleanup({ save: true, nickname: nicknameInput.value.trim() }); 
+    }
+    
+    function onSkip() { 
+      cleanup({ save: false }); 
+    }
+
+    modalSaveBtn.addEventListener('click', onSave);
+    modalSkipBtn.addEventListener('click', onSkip);
+  });
+}
+
+async function maybeSaveToHistory(choice, pngBlob, schemBlob, result, currentFileBaseName, currentMode) {
+  if (!choice?.save || !window.CMAGHistory) return;
+  
+  try {
+    await CMAGHistory.saveEntry({
+      pngBlob, 
+      schemBlob,
+      nickname: choice.nickname,
+      baseName: currentFileBaseName,
+      mode: currentMode,
+      width: result?.width,
+      height: result?.height
+    });
+    
+    if (typeof refreshHistoryCarousel === 'function') {
+      await refreshHistoryCarousel();
+    }
+  } catch (err) {
+    console.warn('Salvataggio nella cronologia non riuscito:', err);
   }
+}
 
   // ============================================================
   // 7. Esportazione
