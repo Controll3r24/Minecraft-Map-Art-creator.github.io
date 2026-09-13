@@ -6,9 +6,6 @@
 <title>Controller Map Art Generator — da foto a mappa di blocchi</title>
 <meta name="description" content="Carica una foto, scegli Survival o Creativa e scarica un .schem pronto per WorldEdit/Litematica, l'anteprima, la lista materiali e i comandi per costruirla in Minecraft.">
 
-<!-- Anteprima link (Discord, WhatsApp, Twitter/X, Facebook...).
-     Dopo aver pubblicato il sito, sostituisci SITE_URL qui sotto (3 volte)
-     con il tuo indirizzo reale: vedi README, sezione "Anteprima link". -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Controller Map Art Generator">
 <meta property="og:title" content="Controller Map Art Generator">
@@ -159,10 +156,10 @@
 </footer>
 
 <div class="modal-backdrop" id="nicknameModalBackdrop" hidden>
-  <div class="modal bevel">
-    <h2>Salva nella Cronologia?</h2>
+  <div class="modal bevel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Salva nella Cronologia?</h2>
     <p>Se vuoi, la tua build può comparire nel carosello in cima al sito, con il nickname che scegli.</p>
-    <label class="modal-field">
+    <label class="modal-field" for="nicknameInput">
       Nickname (opzionale)
       <input type="text" id="nicknameInput" maxlength="24" placeholder="Es. Steve93">
     </label>
