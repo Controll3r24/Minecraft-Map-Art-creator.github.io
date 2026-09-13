@@ -1,3 +1,5 @@
+
+
 :root {
   --ink: #17171a;
   --panel: #232327;
@@ -31,6 +33,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* focus visibility */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .dropzone:focus-visible {
   outline: 3px solid var(--diamond);
   outline-offset: 2px;
@@ -40,6 +43,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   * { animation: none !important; transition: none !important; }
 }
 
+/* ---------- Bevel helper (bordo a rilievo stile GUI di gioco) ---------- */
 .bevel {
   border: 2px solid var(--ink);
   box-shadow:
@@ -47,6 +51,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     inset -2px -2px 0 rgba(0,0,0,.45);
 }
 
+/* ---------- History strip (carosello in cima) ---------- */
 .history-strip {
   background: #101012;
   border-bottom: 2px solid var(--panel-raised);
@@ -126,6 +131,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   white-space: nowrap;
 }
 
+/* ---------- Hero ---------- */
 .hero {
   padding: 88px 24px 56px;
   border-bottom: 2px solid var(--panel-raised);
@@ -155,6 +161,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .hero .lede strong { color: var(--paper); font-weight: 600; }
 
+/* ---------- Layout ---------- */
 .workspace {
   max-width: 1180px;
   margin: 0 auto;
@@ -192,6 +199,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   color: var(--paper);
 }
 
+/* ---------- Dropzone ---------- */
 .dropzone {
   display: flex;
   align-items: center;
@@ -267,6 +275,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   image-rendering: auto;
 }
 
+/* ---------- Cropper ---------- */
 .crop-wrap {
   background: #000;
   border: 2px solid var(--ink);
@@ -337,6 +346,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   display: block;
 }
 
+/* ---------- Mode choice ---------- */
 .mode-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -379,6 +389,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .mode-btn.active span { color: #dcefcd; }
 
+/* ---------- Select & number inputs ---------- */
 select, input[type="number"] {
   font-family: var(--font-body);
   font-size: 14px;
@@ -409,6 +420,7 @@ select, input[type="number"] {
 
 .custom-size input { width: 100%; }
 
+/* ---------- Buttons ---------- */
 .primary-btn {
   width: 100%;
   font-family: var(--font-display);
@@ -458,6 +470,7 @@ select, input[type="number"] {
     inset -2px -2px 0 rgba(0,0,0,.4);
 }
 
+/* ---------- Preview ---------- */
 .canvas-wrap {
   min-height: 420px;
   background:
@@ -512,6 +525,7 @@ select, input[type="number"] {
   color: var(--paper-dim);
 }
 
+/* ---------- Materials list ---------- */
 .materials-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -541,6 +555,7 @@ select, input[type="number"] {
 .material-name { flex: 1; }
 .material-count { color: var(--paper-dim); font-variant-numeric: tabular-nums; }
 
+/* ---------- Footer ---------- */
 .site-footer {
   max-width: 1180px;
   margin: 0 auto;
@@ -553,6 +568,7 @@ select, input[type="number"] {
 .site-footer .credit { margin-top: 8px; }
 .site-footer a { color: var(--diamond); }
 
+/* ---------- Modal ---------- */
 .modal-backdrop {
   position: fixed;
   inset: 0;
