@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controller Map Art Generator — da foto a mappa di blocchi</title>
+<meta name="description" content="Carica una foto, scegli Survival o Creativa e scarica l'anteprima, la lista materiali, un .schem pronto per WorldEdit/Litematica e i comandi per costruirla in Minecraft.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Controller Map Art Generator</h1>
+    <p class="lede">Carica una foto e trasformala in una mappa di blocchi di Minecraft: scegli tra
+      <strong>Creativa</strong>, con la massima fedeltà dei colori, e <strong>Survival</strong>, con solo blocchi facili da procurarsi.
+      Poi scarica un file <strong>.schem</strong> pronto per WorldEdit o Litematica, o il pacchetto completo con anteprima, materiali e comandi.</p>
+  </div>
+</header>
+
+<main class="workspace">
+
+  <section class="panel controls" aria-label="Impostazioni">
+
+    <div class="field">
+      <h2>1. Immagine</h2>
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <div id="dropzoneEmpty" class="dropzone-empty">
+          <span class="dropzone-icon" aria-hidden="true"></span>
+          <p>Trascina una foto qui<br>o fai clic per sceglierla</p>
+        </div>
+        <img id="thumbPreview" class="thumb-preview" hidden alt="Anteprima immagine caricata">
+      </label>
+      <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp, image/bmp" hidden>
+    </div>
+
+    <div class="field">
+      <h2>2. Modalità</h2>
+      <div class="mode-choice">
+        <button type="button" class="mode-btn active" data-mode="creativa">
+          Creativa
+          <span>Palette intera, massima fedeltà cromatica</span>
+        </button>
+        <button type="button" class="mode-btn" data-mode="survival">
+          Survival
+          <span>Solo blocchi facili da ottenere in gioco</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <h2>3. Dimensione</h2>
+      <select id="sizePreset">
+        <option value="32">Mini — 32×32</option>
+        <option value="64">Piccola — 64×64</option>
+        <option value="128" selected>Standard — 128×128 (1 mappa)</option>
+        <option value="256">Grande — 256×256 (2×2 mappe)</option>
+        <option value="384">Enorme — 384×384 (3×3 mappe)</option>
+        <option value="custom">Personalizzata…</option>
+      </select>
+      <div class="custom-size" id="customSize" hidden>
+        <label>Largh. <input type="number" id="customW" min="8" max="512" value="128"></label>
+        <label>Alt. <input type="number" id="customH" min="8" max="512" value="128"></label>
+      </div>
+    </div>
+
+    <button type="button" id="generateBtn" class="primary-btn" disabled>Genera anteprima</button>
+  </section>
+
+  <section class="panel preview-panel" aria-label="Anteprima">
+    <div class="canvas-wrap">
+      <canvas id="previewCanvas"></canvas>
+      <p class="placeholder" id="placeholderText">La tua costruzione a blocchi apparirà qui</p>
+    </div>
+
+    <div class="stats" id="stats" hidden>
+      <div class="stat"><span id="statBlocks">0</span><label>blocchi totali</label></div>
+      <div class="stat"><span id="statUnique">0</span><label>tipi di blocco</label></div>
+      <div class="stat"><span id="statSize">0×0</span><label>dimensione</label></div>
+    </div>
+
+    <div class="download-row">
+      <button type="button" id="downloadSchemBtn" class="primary-btn" disabled>Scarica .schem</button>
+      <button type="button" id="downloadBtn" class="primary-btn secondary-btn" disabled>Scarica pacchetto .zip completo</button>
+    </div>
+  </section>
+
+  <section class="panel materials-panel" id="materialsPanel" hidden aria-label="Lista materiali">
+    <h2>Lista materiali</h2>
+    <div class="materials-list" id="materialsList"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Controller Map Art Generator è un progetto amatoriale, non affiliato con Mojang o Microsoft. Minecraft è un marchio registrato di Mojang Synergies AB. Tutta la conversione avviene nel tuo browser: nessuna immagine viene caricata su un server.</p>
+  <p class="credit">Realizzato per la community di <a href="https://www.youtube.com/@Controll3r24" target="_blank" rel="noopener">Controll3r24</a> — <a href="https://discord.gg/VegdMaWkV6" target="_blank" rel="noopener">unisciti al Discord</a>.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="blocks.js"></script>
+<script src="schem.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
