@@ -1,12 +1,3 @@
-/* ============================================
-   Bloccami — token: colore, tipografia, layout
-   Colore: --ink #17171a, --panel #232327, --stone #48484d,
-           --stone-light #6a6a70, --grass #6a9c3f, --diamond #4fd1c5,
-           --paper #eeece5
-   Tipo: 'Press Start 2P' per titoli (voce del gioco), 'Inter' per il corpo
-   Layout: pannello controlli a sinistra, anteprima grande a destra,
-           bordi netti a bassorilievo (bevel) come le GUI di Minecraft
-   ============================================ */
 
 :root {
   --ink: #17171a;
