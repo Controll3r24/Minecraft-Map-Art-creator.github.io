@@ -1,21 +1,3 @@
-"""
-genera_schematic.py — strumento opzionale a riga di comando
-
-Converte una foto in un file .schem (formato Sponge Schematic) piatto,
-importabile direttamente in WorldEdit o Litematica. Il sito
-"Controller Map Art Generator" genera già un .schem direttamente nel
-browser: questo script serve solo a chi preferisce lavorare da riga di
-comando o generare più immagini in batch.
-
-Richiede:
-    pip install pillow mcschematic
-
-Uso:
-    python genera_schematic.py foto.png
-    python genera_schematic.py foto.png --modalita survival --lato 128
-    python genera_schematic.py foto.png --larghezza 256 --altezza 128
-"""
-
 import argparse
 import math
 import os
@@ -23,8 +5,6 @@ import os
 from PIL import Image
 import mcschematic
 
-# Stessa palette (semplificata) usata dal sito, generata dagli stessi
-# colori di tintura di base per restare coerente con l'anteprima web.
 DYE_BASE = {
     "white": "#F9FFFE", "light_gray": "#9D9D97", "gray": "#474F52",
     "black": "#1D1D21", "brown": "#835432", "red": "#B02E26",
@@ -51,7 +31,7 @@ MISC_BLOCKS = {
     (67, 129, 24): "minecraft:melon",
 }
 
-SURVIVAL_UNFRIENDLY = {"glazed_terracotta"}  # richiedono molte fusioni
+SURVIVAL_UNFRIENDLY = {"glazed_terracotta"}
 
 
 def hex_to_rgb(hex_str):
@@ -68,7 +48,6 @@ def darken(rgb, amount):
 
 
 def build_palette(modalita):
-    """Ricostruisce la stessa famiglia di colori di blocks.js in Python."""
     palette = {}
 
     for key, hex_color in DYE_BASE.items():
@@ -133,4 +112,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
